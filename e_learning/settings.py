@@ -36,6 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'learning_app.apps.LearningAppConfig',
+    'courses.apps.CoursesConfig',
+    'navbar.apps.NavbarConfig'
 ]
 
 MIDDLEWARE = [
