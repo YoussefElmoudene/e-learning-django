@@ -26,6 +26,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', '.vercel.app']  # Allow *.vercel.app
 
+LOGIN_REDIRECT_URL = '/login'
+
 # Application definition
 
 INSTALLED_APPS = [

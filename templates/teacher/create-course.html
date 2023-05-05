@@ -1,0 +1,57 @@
+{% extends 'teacher/teacher.html' %}
+{% block teacher_content %}
+    {% load static %}
+
+    <div class="container">
+        <div class="card shadow mb-4">
+            <div class="card-header justify-content-between d-flex flex-row py-3">
+                <h6 class="m-0 font-weight-bold text-primary">create new course</h6>
+            </div>
+            <form action="create_course" method="post">
+                {% csrf_token %}
+                <div class="row p-5">
+                    <div class="col-md-6 mt-3">
+                        <label for="title" class="form-label">Title</label>
+                        <input type="text" name="title" class="form-control" id="title"/>
+                    </div>
+
+
+                    <div class="col-md-6 mt-3">
+                        <label for="title" class="form-label">Level</label>
+                        <input type="text" name="level" class="form-control" id="level"/>
+                    </div>
+
+                    <div class="col-md-6 mt-3">
+                        <label for="title" class="form-label">Description</label>
+                        <input type="text" name="description" class="form-control" id="description"/>
+                    </div>
+
+
+                    <div class="col-md-6 mt-3">
+                        <label for="title" class="form-label">Duration (in hours)</label>
+                        <input type="number" name="duration" class="form-control" id="duration"/>
+                    </div>
+
+
+                    <div class="col-md-6 mt-3">
+                        <label for="title" class="form-label">Price</label>
+                        <input type="number" name="price" class="form-control" id="price"/>
+                    </div>
+
+                    <div class="col-md-6  mt-3">
+                        <label for="oldPrice" class="form-label">Old Price</label>
+                        <input type="number" name="oldPrice" class="form-control" id="oldPrice">
+                    </div>
+                </div>
+                <div class="row pb-5">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <button style="width: 100%" type="submit" class="btn btn-outline-primary">SAVE</button>
+
+                    </div>
+                    <div class="col-md-4"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends 'teacher/teacher.html' %}
+{% block teacher_content %}
+    {% load static %}
+    <head>
+        <!-- Custom styles for this template -->
+        <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
+
+        <!-- Custom styles for this page -->
+        <link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+    </head>
+    <!-- Main Content -->
+    <div id="content">
+
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+            <!-- DataTales Example -->
+            <div class="card shadow mb-4">
+                <div class="card-header justify-content-between d-flex flex-row py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">My Courses</h6>
+                    <a href="../teacher-create-course" type="button" class="btn  btn-primary">New Course
+                    </a>
+
+                </div>
+
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>title</th>
+                                <th>level</th>
+                                <th>description</th>
+                                <th>dateCreated</th>
+                                <th>duration</th>
+                                <th>price</th>
+                                <th>old price</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            {% for course in courses %}
+                                <tr>
+                                    <td>{{ course.title }}</td>
+                                    <td>{{ course.level }}</td>
+                                    <td>{{ course.description }}</td>
+                                    <td>{{ course.dateCreated }}</td>
+                                    <td>{{ course.duration }} h</td>
+                                    <td>{{ course.price }} DH</td>
+                                    <td>{{ course.oldPrice }} DH</td>
+
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="4">No courses found.</td>
+                                </tr>
+                            {% endfor %}
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container-fluid -->
+
+    </div>
+    <!-- End of Main Content -->
+
+{% endblock %}
