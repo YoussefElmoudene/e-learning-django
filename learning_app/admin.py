@@ -1,15 +1,12 @@
 from django.contrib import admin
 from learning_app.models import Teacher, UserModel
-from learning_app.models import User, Student, Teacher, Course, Inscription, Chapter
+from learning_app.models import Student, Teacher, Course, Inscription, Chapter
 
 
-# Register your models here.
-@admin.register(User)
-class UserAdmin(admin.ModelAdmin):
-    list_display = ('name', 'phone', 'email', 'password', 'role')
-    ordering = ('name',)
-    list_filter = ('name', 'email')
-    search_fields = ('name',)
+@admin.register(UserModel)
+class AuthorAdmin(admin.ModelAdmin):
+    list_display = (
+        'email', 'password', 'name', 'phone', 'role')
 
 
 @admin.register(Student)
@@ -22,15 +19,15 @@ class StudentAdmin(admin.ModelAdmin):
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('title', 'level', 'description', 'dateCreated', 'duration', 'price')
-    ordering = ('level',)
-    list_filter = ('level',)
+    list_display = ('title', 'level', 'description', 'dateCreated', 'duration', 'price', 'oldPrice')
+    ordering = ('title',)
+    list_filter = ('title',)
     search_fields = ('title',)
 
 
 @admin.register(Inscription)
 class InscriptionAdmin(admin.ModelAdmin):
-    list_display = ('date',)
+    list_display = ('date', 'course', 'student')
     ordering = ('date',)
     list_filter = ('date',)
     search_fields = ('date',)
@@ -38,7 +35,7 @@ class InscriptionAdmin(admin.ModelAdmin):
 
 @admin.register(Chapter)
 class ChapterAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description', 'img', 'video')
+    list_display = ('name', 'course', 'description', 'img', 'video')
     ordering = ('name',)
     list_filter = ('name',)
     search_fields = ('name',)
@@ -49,9 +46,3 @@ class AuthorAdmin(admin.ModelAdmin):
     list_display = (
         'user_profile', 'salaire', 'grade',
         'specialty')
-
-
-@admin.register(UserModel)
-class AuthorAdmin(admin.ModelAdmin):
-    list_display = (
-        'email', 'password', 'name', 'phone', 'role')

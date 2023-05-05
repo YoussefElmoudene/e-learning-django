@@ -3,6 +3,7 @@ from enum import Enum
 
 from django.contrib.auth.models import AbstractUser, User
 from django.db import models
+from django.utils import timezone
 
 
 class Role(Enum):
@@ -39,7 +40,7 @@ class Course(models.Model):
     title = models.CharField(max_length=100)
     level = models.CharField(max_length=50)
     description = models.TextField()
-    dateCreated = models.DateField(default=datetime.datetime.now())
+    dateCreated = models.DateField()
     duration = models.CharField(max_length=20)
     price = models.FloatField()
     oldPrice = models.FloatField(default=None, null=True)
