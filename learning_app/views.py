@@ -1,18 +1,18 @@
 import logging
+import os
 
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http import HttpResponse, request
+from django.db.models.functions import window
+from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import reverse
-from django.contrib.auth.models import User
-from django.db import IntegrityError
 
 from learning_app.auth.Authentication import Authentication
-from learning_app.models import Course, Teacher, Student, UserModel
+from learning_app.models import Course, Teacher, Chapter
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +20,9 @@ logger = logging.getLogger(__name__)
 # Create your views here.
 def index(request):
     # Page from the theme
-    return render(request, 'home.html')
+    courses = Course.objects.all()
+    teachers = Teacher.objects.all()
+    return render(request, 'home.html', {'courses': courses, 'teachers': teachers})
 
 
 def show_login_page(request):
@@ -51,8 +53,29 @@ def show_teacher_courses(request):
 
 
 @login_required
+def show_course_chapters(request):
+    filter_value = request.GET.get('filter')
+    teacher = Teacher.objects.all().get(user_profile=request.user.id)
+    courses = Course.objects.all().filter(teacher=teacher)
+    print(filter_value)
+    if filter_value is None or filter_value == 'all':
+        chapters = Chapter.objects.all()
+    else:
+        chapters = Chapter.objects.all().filter(course=filter_value)
+
+    print(chapters)
+    return render(request, "teacher/chapters.html", {'courses': courses, 'chapters': chapters})
+
+
+@login_required
 def show_teacher_create_course(request):
     return render(request, "teacher/create-course.html")
+
+
+@login_required
+def show_teacher_create_chapter(request):
+    courses = Course.objects.all()
+    return render(request, "teacher/create-chapter.html", {'courses': courses})
 
 
 def logout_view(request):
@@ -71,7 +94,7 @@ def do_login(request):
         if user != None:
             login(request, user)
             if user.role == 'STUDENT':
-                return redirect('/courses')
+                return redirect('/student-dashboard')
             elif user.role == 'TEACHER':
                 return redirect("/teacher-dashboard")
             else:
@@ -100,34 +123,37 @@ def create_course(request):
         return redirect("/teacher-create-course")
 
 
-def create_student(request):
+def create_chapter(request):
     if request.method != "POST":
         return HttpResponse("<h2>Method Not Allowed</h2>")
     else:
         name = request.POST.get("name")
-        phone = request.POST.get("phone")
-        username = request.POST.get("username")
-        password = request.POST.get("password")
-        level = request.POST.get("level")
+        description = request.POST.get("description")
+        orderNumber = request.POST.get("orderNumber")
+        print(request.FILES)
+        print(request.POST.get('image'))
 
-        try:
+        # upload image
+        image_file = request.FILES['image']
+        image_name = image_file.name.lower().replace(' ', '_')
+        img = os.path.join('static/media/chapter_images/', image_name)
+        with open(img, 'wb+') as destination:
+            for chunk in image_file.chunks():
+                destination.write(chunk)
 
-            user = User.objects.create_user(username=username, password=password)
-            user_profile = UserModel(name=name, phone=phone)
-            user_profile.save()
-            user_profile.user = user
-            user_profile.save()
-            student = Student(user_profile=user_profile, level=level)
-            student.save()
+        # upload video
+        video_file = request.FILES['video']
+        video_name = video_file.name.lower().replace(' ', '_')
+        video = os.path.join('static/media/chapter_videos/', video_name)
 
-            return redirect('/login')
+        with open(video, 'wb+') as destination:
+            for chunk in video_file.chunks():
+                destination.write(chunk)
 
-        except IntegrityError:
-            # If the username is already taken, show an error message to the user
-            error_message = "Username already taken. Please choose a different username."
-            return render(request, "create_student.html", {"error_message": error_message})
-
-        except Exception as e:
-            # Handle other possible errors
-            error_message = "An error occurred. Please try again later."
-            return render(request, "create_student.html", {"error_message": error_message})
+        course = Course.objects.all().get(id=request.POST.get('filter'))
+        chapter = Chapter(name=name, description=description, orderNumber=orderNumber,
+                          img=img, video=video, course=course)
+        print(chapter)
+        chapter.save()
+        print(chapter)
+        return redirect("/teacher-create-chapter")

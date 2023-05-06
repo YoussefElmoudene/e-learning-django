@@ -63,6 +63,7 @@ class Inscription(models.Model):
 class Chapter(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
-    img = models.ImageField(upload_to='chapter_images/')
-    video = models.FileField(upload_to='chapter_videos/')
+    orderNumber = models.IntegerField(default=1)
+    img = models.ImageField(upload_to='static/media/chapter_images/')
+    video = models.FileField(upload_to='static/media/chapter_videos/')
     course = models.ForeignKey(Course, on_delete=models.CASCADE)

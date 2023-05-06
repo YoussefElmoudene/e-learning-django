@@ -1,6 +1,8 @@
 from django.shortcuts import render
 
+from learning_app.models import Course
+
 
 def courses(request):
-    # Page from the theme
-    return render(request, 'courses.html')
+    courses = Course.objects.all()
+    return render(request, 'courses.html', {'courses': courses})
