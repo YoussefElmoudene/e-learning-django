@@ -20,7 +20,9 @@ logger = logging.getLogger(__name__)
 # Create your views here.
 def index(request):
     # Page from the theme
-    return render(request, 'home.html')
+    courses = Course.objects.all()
+    teachers = Teacher.objects.all()
+    return render(request, 'home.html', {'courses': courses, 'teachers': teachers})
 
 
 def show_login_page(request):
