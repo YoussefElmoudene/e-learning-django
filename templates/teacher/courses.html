@@ -36,6 +36,7 @@
                                 <th>duration</th>
                                 <th>price</th>
                                 <th>old price</th>
+                                <th>actions</th>
                             </tr>
                             </thead>
 
@@ -49,7 +50,20 @@
                                     <td>{{ course.duration }} h</td>
                                     <td>{{ course.price }} DH</td>
                                     <td>{{ course.oldPrice }} DH</td>
+                                    <td>
+                                        <button type="button" class="btn btn-outline-warning">
+                                            <i class="fas fa-pen"></i>
+                                        </button>
 
+                                        <button type="button" class="btn btn-outline-info">
+                                            <i class="fas fa-list"></i>
+                                        </button>
+
+                                        <button type="button" class="btn btn-outline-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+
+                                    </td>
                                 </tr>
                             {% empty %}
                                 <tr>

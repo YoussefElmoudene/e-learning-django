@@ -1,0 +1,108 @@
+{% extends 'teacher/teacher.html' %}
+{% block teacher_content %}
+    {% load static %}
+    <head>
+        <!-- Custom styles for this template -->
+        <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
+
+        <!-- Custom styles for this page -->
+        <link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+    </head>
+    <!-- Main Content -->
+    <div id="content">
+
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+            <!-- DataTales Example -->
+            <div class="card shadow mb-4">
+                <div class="card-header justify-content-between d-flex flex-row py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Chapters</h6>
+
+
+                    <form action="{% url 'teacher-course-chapters' %}" method="get">
+                        <div class="row">
+                            <div class="col-md-10">
+
+                                <select name="filter" id="filter" class="form-select"
+                                        aria-label="Default select example">
+                                    <option value="all" selected>All chapters</option>
+                                    {% for course in courses %}
+                                        <option value="{{ course.id }}">Courses for {{ course.title }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-outline-primary">
+                                    <i class="fas fa-sync"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+
+                    <a href="../teacher-create-chapter" type="button" class="btn  btn-primary">New chapter
+                    </a>
+
+                </div>
+
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>name</th>
+                                <th>order number</th>
+                                <th>image</th>
+                                <th>video</th>
+                                <th>course</th>
+                                <th>actions</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            {% for chapter in chapters %}
+                                <tr>
+                                    <td>{{ chapter.name }}</td>
+                                    <td>{{ chapter.orderNumber }}</td>
+                                    <td>
+                                        <img style="width: 100px;height: 100px;border-radius: 5px;"
+                                             src="{{ chapter.img }}" alt="image not found"></td>
+                                    <td>
+                                        <video width="100" height="100" controls>
+                                            <source src="{{ chapter.video }}" type="video/mp4">
+                                        </video>
+                                    </td>
+                                    <td>{{ chapter.course.title }}</td>
+                                    <td>
+                                        <button type="button" class="btn mb-1 btn-outline-warning">
+                                            <i class="fas fa-pen"></i>
+                                        </button>
+
+                                        <button type="button" class="btn btn-outline-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="4">No chapters found.</td>
+                                </tr>
+                            {% endfor %}
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container-fluid -->
+
+    </div>
+    <!-- End of Main Content -->
+
+{% endblock %}
