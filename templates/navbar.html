@@ -9,7 +9,9 @@
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <div class="navbar-nav ms-auto p-4 p-lg-0">
             <a href="/" class="nav-item nav-link active">Home</a>
+             {% if request.user.is_authenticated == False %}
             <a href="login" class="nav-item nav-link">Login</a>
+            {% endif %}
             <a href="about" class="nav-item nav-link">About</a>
             <a href="courses" class="nav-item nav-link">Courses</a>
             <div class="nav-item dropdown">

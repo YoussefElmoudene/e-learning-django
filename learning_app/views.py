@@ -37,8 +37,10 @@ def studentForm(request):
 
 def show_course_details(request, id):
     course = Course.objects.all().get(id=id)
+    chapters = Chapter.objects.all().filter(course=course.id)
     print(course)
-    return render(request, "course-details.html", {'course': course})
+    print(chapters)
+    return render(request, "course-details.html", {'course': course, 'chapters': chapters})
 
 
 @login_required
