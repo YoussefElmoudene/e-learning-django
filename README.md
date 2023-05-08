@@ -12,7 +12,7 @@ Une application web e-learning développée en utilisant Django. Cette applicati
 
 
 Prérequis techniques
-- Python 3.9 ou supérieur
+- Python 3.6 ou supérieur
 - Django 4.2
 - sqlparse 0.4.3
 Installation
