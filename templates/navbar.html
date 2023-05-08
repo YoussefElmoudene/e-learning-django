@@ -1,3 +1,4 @@
+{% load static %}
 <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
     <a href="/" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
         <h2 class="m-0 text-primary"><i class="fa fa-book me-3"></i>eLEARNING</h2>
@@ -19,8 +20,25 @@
                     <a href="404" class="dropdown-item">404 Page</a>
                 </div>
             </div>
-            <a href="contact" class="nav-item nav-link">Contact</a>
         </div>
-        <a href="{% url 'create-student' %}" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Join Now<i class="fa fa-arrow-right ms-3"></i></a>
+        {% if  request.user.is_authenticated %}
+            <a class=" py-4 d-none d-lg-block">{{ request.user }}</a>
+
+
+            <a style="padding: 5px;
+                border: 1px solid;
+                border-radius: 3px;
+                margin: 0 10px;"
+               href="{% url 'logout' %}" data-toggle="modal" data-target="#logoutModal">
+                <i class="fas fa-sign-out-alt fa-sm fa-fw text-gray-400"></i>
+            </a>
+
+            {#            <img src="avatar.png" alt="Avatar" class="avatar">#}
+        {% else %}
+            <a href="new-student" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Join Now<i
+                    class="fa fa-arrow-right ms-3"></i></a>
+
+        {% endif %}
+
     </div>
 </nav>

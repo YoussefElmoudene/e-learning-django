@@ -4,7 +4,9 @@ import os
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db import IntegrityError
 from django.db.models.functions import window
 from django.http import HttpResponse
 from django.shortcuts import redirect
@@ -12,7 +14,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from learning_app.auth.Authentication import Authentication
-from learning_app.models import Course, Teacher, Chapter
+from learning_app.models import Course, Teacher, Chapter, Student, UserModel
 
 logger = logging.getLogger(__name__)
 
@@ -27,6 +29,16 @@ def index(request):
 
 def show_login_page(request):
     return render(request, "login.html")
+
+
+def studentForm(request):
+    return render(request, "create_student.html")
+
+
+def show_course_details(request, id):
+    course = Course.objects.all().get(id=id)
+    print(course)
+    return render(request, "course-details.html", {'course': course})
 
 
 @login_required
@@ -94,7 +106,7 @@ def do_login(request):
         if user != None:
             login(request, user)
             if user.role == 'STUDENT':
-                return redirect('/student-dashboard')
+                return redirect('/')
             elif user.role == 'TEACHER':
                 return redirect("/teacher-dashboard")
             else:
@@ -157,3 +169,34 @@ def create_chapter(request):
         chapter.save()
         print(chapter)
         return redirect("/teacher-create-chapter")
+
+
+def create_student(request):
+    if request.method != "POST":
+        return HttpResponse("<h2>Method Not Allowed</h2>")
+    else:
+        name = request.POST.get("name")
+        phone = request.POST.get("phone")
+        username = request.POST.get("username")
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        level = request.POST.get("level")
+
+        try:
+
+            user_profile = UserModel(username=username, email=email, password=password, name=name, phone=phone,
+                                     role='STUDENT')
+            user_profile.save()
+            student = Student(user_profile=user_profile, level=level)
+            student.save()
+            return redirect('/login')
+
+        except IntegrityError:
+            # If the username is already taken, show an error message to the user
+            error_message = "Username already taken. Please choose a different username."
+            return render(request, "create_student.html", {"error_message": error_message})
+
+        except Exception as e:
+            # Handle other possible errors
+            error_message = "An error occurred. Please try again later."
+            return render(request, "create_student.html", {"error_message": error_message})
